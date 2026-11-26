@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unlock Test</title>
+
+<title>Accesso al Contenuto</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -14,42 +16,50 @@ body {
     margin: 0;
     min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-    background: #f8f7f4;
-    color: #222;
+    align-items: center;
+    background: #f7f5f0;
+    color: #1f1f1f;
     font-family: Georgia, serif;
+    padding: 30px;
 }
 
 .container {
     width: 100%;
     max-width: 900px;
-    padding: 40px;
     text-align: center;
 }
 
 h1 {
-    font-weight: 400;
-    font-size: 3rem;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: normal;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+    color: #444;
 }
 
-.message {
-    color: #666;
-    font-size: 1.1rem;
+.main-text {
+    font-size: 1.35rem;
     line-height: 1.8;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 #countdown {
-    font-size: 2rem;
-    letter-spacing: 2px;
+    font-size: 3rem;
+    font-weight: normal;
+    margin-bottom: 50px;
+}
+
+.release-info {
+    color: #666;
+    line-height: 1.8;
+    font-size: 1rem;
 }
 
 #videoSection {
     display: none;
-    margin-top: 30px;
-    animation: fadeIn 1s ease;
+    animation: fadeIn 1.2s ease;
 }
 
 .video-wrapper {
@@ -58,6 +68,7 @@ h1 {
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
+    border-radius: 12px;
 }
 
 .video-wrapper iframe {
@@ -66,12 +77,11 @@ h1 {
     width: 100%;
     height: 100%;
     border: none;
-    border-radius: 12px;
 }
 
-.note {
-    margin-top: 20px;
-    color: #777;
+.available {
+    margin-bottom: 40px;
+    font-size: 1.2rem;
 }
 
 @keyframes fadeIn {
@@ -79,11 +89,13 @@ h1 {
         opacity: 0;
         transform: translateY(15px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 </style>
 </head>
 
@@ -91,46 +103,57 @@ h1 {
 
 <div class="container">
 
-    <h1>Testing</h1>
+    <div id="waitingSection">
 
-    <div class="message">
-        This page will unlock automatically.
+        <h1>Accesso al Contenuto</h1>
+
+        <div class="main-text">
+            La riproduzione del video sarà abilitata tra:
+        </div>
+
+        <div id="countdown"></div>
+
+        <div class="release-info">
+            Disponibile a partire da:<br>
+            26 novembre 2026 · Test automatico (30 secondi)
+        </div>
+
     </div>
 
-    <div id="countdown"></div>
-
     <div id="videoSection">
+
+        <h1>Accesso al Contenuto</h1>
+
+        <div class="available">
+            Presentazione disponibile.
+        </div>
+
         <div class="video-wrapper">
             <iframe id="videoFrame" allow="autoplay"></iframe>
         </div>
 
-        <div class="note">
-            Video unlocked successfully.
-        </div>
     </div>
 
 </div>
 
 <script>
 
-// 30 seconds from page load
-const releaseDate = new Date(Date.now() + 30 * 1000);
+// TEST: 30 secondi dal caricamento della pagina
+const releaseDate = new Date(Date.now() + 30000);
 
-// Base64-encoded file ID
-const hidden =
+// File ID codificato
+const hiddenId =
 "MUg3V25aaU5PRFgxVzQ5WlBjUF8waDdzUXdZNVVLNWRC";
 
 let unlocked = false;
 
 function unlockVideo() {
 
-    if (unlocked) {
-        return;
-    }
+    if (unlocked) return;
 
     unlocked = true;
 
-    const fileId = atob(hidden);
+    const fileId = atob(hiddenId);
 
     const videoUrl =
         "https://drive.google.com/file/d/" +
@@ -139,7 +162,7 @@ function unlockVideo() {
 
     document.getElementById("videoFrame").src = videoUrl;
 
-    document.getElementById("countdown").style.display = "none";
+    document.getElementById("waitingSection").style.display = "none";
     document.getElementById("videoSection").style.display = "block";
 
     clearInterval(timer);
@@ -157,7 +180,7 @@ function updateCountdown() {
     const seconds = Math.ceil(diff / 1000);
 
     document.getElementById("countdown").textContent =
-        seconds + " seconds";
+        seconds + " s";
 }
 
 updateCountdown();
@@ -167,5 +190,4 @@ const timer = setInterval(updateCountdown, 1000);
 </script>
 
 </body>
-
 </html>
