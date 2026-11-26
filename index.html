@@ -8,91 +8,127 @@
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f7f5f0;
-    color: #1f1f1f;
-    font-family: Georgia, serif;
-    padding: 30px;
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f8f6f1;
+    color:#202020;
+    font-family:Georgia, serif;
+    padding:40px;
 }
 
-.container {
-    width: 100%;
-    max-width: 900px;
-    text-align: center;
+.container{
+    width:100%;
+    max-width:900px;
+    text-align:center;
 }
 
-h1 {
-    font-size: 1rem;
-    font-weight: normal;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 60px;
-    color: #444;
+.header{
+    letter-spacing:4px;
+    text-transform:uppercase;
+    font-size:0.95rem;
+    color:#666;
+    margin-bottom:80px;
 }
 
-.main-text {
-    font-size: 1.35rem;
-    line-height: 1.8;
-    margin-bottom: 50px;
+.main-text{
+    font-size:1.4rem;
+    line-height:1.8;
+    margin-bottom:50px;
 }
 
-#countdown {
-    font-size: 3rem;
-    font-weight: normal;
-    margin-bottom: 50px;
+#countdown{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    margin-bottom:60px;
+    flex-wrap:wrap;
 }
 
-.release-info {
-    color: #666;
-    line-height: 1.8;
-    font-size: 1rem;
+.time-box{
+    min-width:100px;
 }
 
-#videoSection {
-    display: none;
-    animation: fadeIn 1.2s ease;
+.time-number{
+    font-size:3rem;
+    color:#1f1f1f;
 }
 
-.video-wrapper {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    border-radius: 12px;
+.time-label{
+    margin-top:8px;
+    font-size:0.9rem;
+    color:#777;
+    letter-spacing:1px;
+    text-transform:uppercase;
 }
 
-.video-wrapper iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
+.release-info{
+    color:#666;
+    line-height:1.8;
 }
 
-.available {
-    margin-bottom: 40px;
-    font-size: 1.2rem;
+.date{
+    font-size:1.05rem;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
+#videoSection{
+    display:none;
+    animation:fadeIn 1.5s ease;
+}
+
+.video-title{
+    font-size:1.25rem;
+    margin-bottom:35px;
+}
+
+.video-wrapper{
+    position:relative;
+    width:100%;
+    padding-bottom:56.25%;
+    height:0;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+.video-wrapper iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media (max-width:700px){
+
+    #countdown{
+        gap:20px;
+    }
+
+    .time-number{
+        font-size:2.2rem;
+    }
+
+    .main-text{
+        font-size:1.2rem;
     }
 }
 
@@ -105,27 +141,55 @@ h1 {
 
     <div id="waitingSection">
 
-        <h1>Accesso al Contenuto</h1>
+        <div class="header">
+            Accesso al Contenuto
+        </div>
 
         <div class="main-text">
             La riproduzione del video sarà abilitata tra:
         </div>
 
-        <div id="countdown"></div>
+        <div id="countdown">
+
+            <div class="time-box">
+                <div class="time-number" id="days">0</div>
+                <div class="time-label">Giorni</div>
+            </div>
+
+            <div class="time-box">
+                <div class="time-number" id="hours">0</div>
+                <div class="time-label">Ore</div>
+            </div>
+
+            <div class="time-box">
+                <div class="time-number" id="minutes">0</div>
+                <div class="time-label">Minuti</div>
+            </div>
+
+        </div>
 
         <div class="release-info">
-            Disponibile a partire da:<br>
-            26 novembre 2026 · Test automatico (30 secondi)
+            <div>Disponibile a partire da:</div>
+
+            <div class="date">
+                30 novembre 2026 · 19:00
+            </div>
+
+            <div>
+                (Europa / Roma)
+            </div>
         </div>
 
     </div>
 
     <div id="videoSection">
 
-        <h1>Accesso al Contenuto</h1>
+        <div class="header">
+            Accesso al Contenuto
+        </div>
 
-        <div class="available">
-            Presentazione disponibile.
+        <div class="video-title">
+            Presentazione disponibile
         </div>
 
         <div class="video-wrapper">
@@ -138,29 +202,32 @@ h1 {
 
 <script>
 
-// TEST: 30 secondi dal caricamento della pagina
-const releaseDate = new Date(Date.now() + 30000);
+// 30 Novembre 2026, 19:00 Roma
+const releaseDate =
+new Date("2026-11-30T19:00:00+01:00");
 
-// File ID codificato
+// Base64 del file id
 const hiddenId =
 "MUg3V25aaU5PRFgxVzQ5WlBjUF8waDdzUXdZNVVLNWRC";
 
 let unlocked = false;
 
-function unlockVideo() {
+function unlockVideo(){
 
-    if (unlocked) return;
+    if(unlocked){
+        return;
+    }
 
     unlocked = true;
 
     const fileId = atob(hiddenId);
 
-    const videoUrl =
+    const url =
         "https://drive.google.com/file/d/" +
         fileId +
         "/preview";
 
-    document.getElementById("videoFrame").src = videoUrl;
+    document.getElementById("videoFrame").src = url;
 
     document.getElementById("waitingSection").style.display = "none";
     document.getElementById("videoSection").style.display = "block";
@@ -168,24 +235,44 @@ function unlockVideo() {
     clearInterval(timer);
 }
 
-function updateCountdown() {
+function updateCountdown(){
 
-    const diff = releaseDate - new Date();
+    const now = new Date();
+    const diff = releaseDate - now;
 
-    if (diff <= 0) {
+    if(diff <= 0){
         unlockVideo();
         return;
     }
 
-    const seconds = Math.ceil(diff / 1000);
+    const totalMinutes =
+        Math.floor(diff / 1000 / 60);
 
-    document.getElementById("countdown").textContent =
-        seconds + " s";
+    const days =
+        Math.floor(totalMinutes / (60 * 24));
+
+    const hours =
+        Math.floor(
+            (totalMinutes % (60 * 24)) / 60
+        );
+
+    const minutes =
+        totalMinutes % 60;
+
+    document.getElementById("days").textContent =
+        days;
+
+    document.getElementById("hours").textContent =
+        hours;
+
+    document.getElementById("minutes").textContent =
+        minutes;
 }
 
 updateCountdown();
 
-const timer = setInterval(updateCountdown, 1000);
+const timer =
+    setInterval(updateCountdown, 1000);
 
 </script>
 
