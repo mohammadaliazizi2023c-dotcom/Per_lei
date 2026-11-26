@@ -1,33 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Testing</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testing</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #faf9f7;
+    color: #2d2d2d;
+    font-family: Georgia, serif;
+}
+
+.container {
+    text-align: center;
+    max-width: 700px;
+    padding: 40px;
+}
+
+h1 {
+    font-weight: 400;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.message {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+#countdown {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+}
+
+#videoSection {
+    display: none;
+    margin-top: 30px;
+}
+
+.button {
+    display: inline-block;
+    padding: 15px 35px;
+    border: 1px solid #2d2d2d;
+    text-decoration: none;
+    color: #2d2d2d;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.button:hover {
+    background: #2d2d2d;
+    color: white;
+}
+
+.note {
+    margin-top: 20px;
+    color: #666;
+}
+</style>
 </head>
+
 <body>
+
+<div class="container">
+
     <h1>Testing</h1>
-    <p id="countdown"></p>
 
-    <script>
-        const releaseDate = new Date(Date.now() + 1 * 60 * 1000);
+    <div class="message">
+        This is a test of the countdown and unlock functionality.
+    </div>
 
-        function updateCountdown() {
-            const diff = releaseDate - new Date();
+    <div id="countdown"></div>
 
-            if (diff <= 0) {
-                document.getElementById("countdown").innerHTML =
-                    "UNLOCKED!";
-                return;
-            }
+    <div id="videoSection">
+        <a
+            class="button"
+            href="https://drive.google.com/file/d/1H7WnZiNODX1W49ZPcP_0h7sQwY5UK5dB/view?usp=sharing"
+            target="_blank">
+            Watch the Video
+        </a>
 
-            const minutes = Math.floor(diff / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
+        <div class="note">
+            The countdown has ended successfully.
+        </div>
+    </div>
 
-            document.getElementById("countdown").innerHTML =
-                `${minutes}m ${seconds}s`;
-        }
+</div>
 
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    </script>
+<script>
+
+// 5 minutes from page load
+const releaseDate = new Date(Date.now() + 1 * 60 * 1000);
+
+function updateCountdown() {
+
+    const now = new Date();
+    const diff = releaseDate - now;
+
+    if (diff <= 0) {
+
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("videoSection").style.display = "block";
+
+        return;
+    }
+
+    const minutes = Math.floor(diff / 1000 / 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").textContent =
+        `${minutes}m ${seconds}s`;
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+</script>
+
 </body>
 </html>
