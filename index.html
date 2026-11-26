@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Testing</title>
+<title>Unlock Test</title>
 
 <style>
 * {
@@ -14,17 +14,17 @@ body {
     margin: 0;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background: #faf9f7;
-    color: #2d2d2d;
+    justify-content: center;
+    background: #f8f7f4;
+    color: #222;
     font-family: Georgia, serif;
-    padding: 20px;
 }
 
 .container {
     width: 100%;
     max-width: 900px;
+    padding: 40px;
     text-align: center;
 }
 
@@ -36,18 +36,20 @@ h1 {
 
 .message {
     color: #666;
+    font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 40px;
 }
 
 #countdown {
-    font-size: 2.5rem;
+    font-size: 2rem;
     letter-spacing: 2px;
 }
 
 #videoSection {
     display: none;
     margin-top: 30px;
+    animation: fadeIn 1.5s ease;
 }
 
 .video-wrapper {
@@ -55,23 +57,31 @@ h1 {
     width: 100%;
     padding-bottom: 56.25%;
     height: 0;
-    overflow: hidden;
-    border-radius: 12px;
 }
 
 .video-wrapper iframe {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: none;
+    border-radius: 12px;
 }
 
 .note {
     margin-top: 20px;
-    color: #666;
-    font-size: 1rem;
+    color: #777;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>
 </head>
@@ -83,32 +93,48 @@ h1 {
     <h1>Testing</h1>
 
     <div class="message">
-        This is a test of the countdown and unlock functionality.
+        This page will unlock automatically.
     </div>
 
     <div id="countdown"></div>
 
     <div id="videoSection">
-
         <div class="video-wrapper">
-            <iframe
-                src="https://drive.google.com/file/d/1H7WnZiNODX1W49ZPcP_0h7sQwY5UK5dB/preview"
-                allow="autoplay">
+            <iframe id="videoFrame"
+                    allow="autoplay">
             </iframe>
         </div>
 
         <div class="note">
-            The countdown has ended successfully.
+            Video unlocked successfully.
         </div>
-
     </div>
 
 </div>
 
 <script>
 
-// TEST: 5 minutes after page load
-const releaseDate = new Date(Date.now() + 0.1 * 60 * 1000);
+// 1 minute from page load
+const releaseDate = new Date(Date.now() + 60 * 1000);
+
+// Hidden file ID (Base64 encoded)
+const hidden =
+"MUg3V25aaU5PRFgxVzQ5WlBjUF8waDdzUXdZNVVLNWRC";
+
+function unlockVideo() {
+
+    const fileId = atob(hidden);
+
+    const url =
+        "https://drive.google.com/file/d/" +
+        fileId +
+        "/preview";
+
+    document.getElementById("videoFrame").src = url;
+
+    document.getElementById("countdown").style.display = "none";
+    document.getElementById("videoSection").style.display = "block";
+}
 
 function updateCountdown() {
 
@@ -116,18 +142,14 @@ function updateCountdown() {
     const diff = releaseDate - now;
 
     if (diff <= 0) {
-
-        document.getElementById("countdown").style.display = "none";
-        document.getElementById("videoSection").style.display = "block";
-
+        unlockVideo();
         return;
     }
 
-    const minutes = Math.floor(diff / 1000 / 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    const seconds = Math.floor(diff / 1000);
 
     document.getElementById("countdown").textContent =
-        `${minutes}m ${seconds}s`;
+        `${seconds} seconds`;
 }
 
 updateCountdown();
