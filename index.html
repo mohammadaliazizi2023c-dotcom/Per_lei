@@ -49,7 +49,7 @@ h1 {
 #videoSection {
     display: none;
     margin-top: 30px;
-    animation: fadeIn 1.5s ease;
+    animation: fadeIn 1s ease;
 }
 
 .video-wrapper {
@@ -57,6 +57,7 @@ h1 {
     width: 100%;
     padding-bottom: 56.25%;
     height: 0;
+    overflow: hidden;
 }
 
 .video-wrapper iframe {
@@ -100,9 +101,7 @@ h1 {
 
     <div id="videoSection">
         <div class="video-wrapper">
-            <iframe id="videoFrame"
-                    allow="autoplay">
-            </iframe>
+            <iframe id="videoFrame" allow="autoplay"></iframe>
         </div>
 
         <div class="note">
@@ -114,48 +113,59 @@ h1 {
 
 <script>
 
-// 1 minute from page load
-const releaseDate = new Date(Date.now() + 60 * 1000);
+// 30 seconds from page load
+const releaseDate = new Date(Date.now() + 30 * 1000);
 
-// Hidden file ID (Base64 encoded)
+// Base64-encoded file ID
 const hidden =
 "MUg3V25aaU5PRFgxVzQ5WlBjUF8waDdzUXdZNVVLNWRC";
 
+let unlocked = false;
+
 function unlockVideo() {
+
+    if (unlocked) {
+        return;
+    }
+
+    unlocked = true;
 
     const fileId = atob(hidden);
 
-    const url =
+    const videoUrl =
         "https://drive.google.com/file/d/" +
         fileId +
         "/preview";
 
-    document.getElementById("videoFrame").src = url;
+    document.getElementById("videoFrame").src = videoUrl;
 
     document.getElementById("countdown").style.display = "none";
     document.getElementById("videoSection").style.display = "block";
+
+    clearInterval(timer);
 }
 
 function updateCountdown() {
 
-    const now = new Date();
-    const diff = releaseDate - now;
+    const diff = releaseDate - new Date();
 
     if (diff <= 0) {
         unlockVideo();
         return;
     }
 
-    const seconds = Math.floor(diff / 1000);
+    const seconds = Math.ceil(diff / 1000);
 
     document.getElementById("countdown").textContent =
-        `${seconds} seconds`;
+        seconds + " seconds";
 }
 
 updateCountdown();
-setInterval(updateCountdown, 1000);
+
+const timer = setInterval(updateCountdown, 1000);
 
 </script>
 
 </body>
+
 </html>
