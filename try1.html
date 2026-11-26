@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testing</title>
+</head>
+<body>
+    <h1>Testing</h1>
+    <p id="countdown"></p>
+
+    <script>
+        const releaseDate = new Date(Date.now() + 5 * 60 * 1000);
+
+        function updateCountdown() {
+            const diff = releaseDate - new Date();
+
+            if (diff <= 0) {
+                document.getElementById("countdown").innerHTML =
+                    "UNLOCKED!";
+                return;
+            }
+
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            document.getElementById("countdown").innerHTML =
+                `${minutes}m ${seconds}s`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
